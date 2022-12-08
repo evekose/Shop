@@ -1,5 +1,16 @@
 ﻿@model Shop.Models.Spaceship.SpaceshipEditViewModel
 
+
+@if (Model.Id.HasValue)
+{
+	<h1>Update</h1>
+}
+else
+{
+	<h1>Add</h1>
+}
+
+
 <h1>Add</h1>
 
 <div>
@@ -84,6 +95,12 @@
 				<input asp-for="BuiltDate" class="form-control" />
 			</div>
 		</div>
+
+		<input asp-action="add" asp-controller="spaceships" type="submit" class=" btn btn-outline-primary" value="Add" />
+		<a asp-action="edit" asp-controller="spaceships" class="btn btn-primary">Edit</a>
+
+		<input asp-action="Update" asp-controller="spaceships" type="submit" class=" btn btn-primary" value="Update" />
+
 
 	</form>
 </div>
