@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Shop.Core.Dto;
+using Shop.Core.ServiceInterface;
 using Shop.Data;
 using Shop.Models.Spaceship;
 
@@ -8,13 +10,16 @@ namespace Shop.Controllers
     {
 
         private readonly ShopContext _context;
+        private readonly ISpaceshipsServices _spaceshipsServices;
 
         public SpaceshipsController
             (
-                ShopContext context
+                ShopContext context,
+                ISpaceshipsServices spaceshipsServices
             )
         {
             _context = context;
+            _spaceshipsServices = spaceshipsServices;
         }
 
         public IActionResult Index()
@@ -32,11 +37,43 @@ namespace Shop.Controllers
             
             return View(result);
         }
-
+        [HttpGet]
         public IActionResult Add()
         {
+            SpaceshipEditViewModel spaceship = new SpaceshipEditViewModel();
 
-            return View("Edit");
+            return View("Edit", spaceship);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(SpaceshipEditViewModel vm)
+        {
+            var dto = new SpaceshipDto()
+            {
+                Id = vm.Id,
+                Name = vm.Name,
+                Type = vm.Type,
+                Crew = vm.Crew,
+                Passengers = vm.Passengers,
+                CargoWeight = vm.CargoWeight,
+                FullTripsCount = vm.FullTripsCount,
+                MaintenanceCount = vm.MaintenanceCount,
+                LastMaintenance = vm.LastMaintenance,
+                EnginePower = vm.EnginePower,
+                MaidenLaunch = vm.MaidenLaunch,
+                BuiltDate = vm.BuiltDate,
+                CreatedAt = vm.CreatedAt,
+                ModifiedAt = vm.ModifiedAt
+            };
+
+            var result = await _spaceshipsServices.Add(dto);
+
+            if (result == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Index), vm);
         }
     }
 }

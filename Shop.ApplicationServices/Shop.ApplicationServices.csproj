@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
+    <ProjectReference Include="..\Shop.Data\Shop.Data.csproj" />
   </ItemGroup>
 
 </Project>
