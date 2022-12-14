@@ -11,8 +11,6 @@ else
 }
 
 
-<h1>Add</h1>
-
 <div>
 	<form method="post" enctype="multipart/form-data">
 		<input asp-for="Id" type="hidden" />
@@ -96,11 +94,16 @@ else
 			</div>
 		</div>
 
-		<input asp-action="add" asp-controller="spaceships" type="submit" class=" btn btn-outline-primary" value="Add" />
-		<a asp-action="edit" asp-controller="spaceships" class="btn btn-primary">Edit</a>
+		@if (Model.Id.HasValue)
+		{
+			<input asp-action="edit" asp-controller="spaceship" type="submit" class="btn btn-primary" value="Update" />
+		}
+		else
+		{
+			<input asp-action="add" asp-controller="spaceship" type="submit" class=" btn btn-outline-primary" value="Add" />
+		}
 
-		<input asp-action="Update" asp-controller="spaceships" type="submit" class=" btn btn-primary" value="Update" />
-
+		<a asp-action="Index" class="btn btn-primary">Index</a>
 
 	</form>
 </div>
