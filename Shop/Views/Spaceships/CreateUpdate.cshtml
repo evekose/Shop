@@ -94,6 +94,13 @@ else
 			</div>
 		</div>
 		<hr/>
+	
+		@foreach (var images in Model.Image)
+		{
+			<partial name="_Images" model="images" />
+		}
+
+		<hr />
 
 
 		@if (Model.Id.HasValue)
