@@ -1,6 +1,6 @@
 ﻿namespace Shop.Models.Spaceship
 {
-    public class SpaceshipEditViewModel
+    public class SpaceshipCreateUpdateViewModel
     {
 
         public Guid? Id { get; set; }

@@ -22,7 +22,7 @@ namespace Shop.ApplicationServices.Services
             _context = context;
         }
 
-        public async Task<Spaceship> Add(SpaceshipDto dto)
+        public async Task<Spaceship> Create(SpaceshipDto dto)
         {
             var domain = new Spaceship()
             {
@@ -74,14 +74,7 @@ namespace Shop.ApplicationServices.Services
 
             
         }
-        public async Task<Spaceship> GetUpdate(Guid id)
-        {
-            var result = await _context.Spaceships
-                .FirstOrDefaultAsync(x => x.Id == id);
-
-            return result;
-        }
-
+      
         public async Task<Spaceship> Delete(Guid id)
         {
             var spaceshipId = await _context.Spaceships
