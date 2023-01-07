@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Shop.Models.Car.CarIndexViewModel>
+
+@{
+	var rowNumber = 1;
+}
+
+
+
+<div class="h1">
+	Products
+</div>
+
+<div>
+	<a asp-action="add" asp-controller="cars" type="submit" class="btn btn-outline-primary">Add</a>
+</div>
+
+<form method="post">
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th scope="col">Nr</th>
+				<th scope="col">Brand</th>
+				<th scope="col">Model</th>
+				<th scope="col">Color</th>
+				<th scope="col">Name Of Owner</th>
+				<th scope="col">Price</th>
+				<th scope="col">Weight</th>
+				<th scope="col">Engine Power</th>
+				<th scope="col">Mileage</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var car in Model){
+				<tr>
+					<td>@rowNumber</td>
+					<td>@car.Brand</td>
+					<td>@car.Model</td>
+					<td>@car.Color</td>
+					<td>@car.NameOfOwner</td>
+					<td>@car.Price</td>
+					<td>@car.Weight</td>
+					<td>@car.EnginePower</td>
+					<td>@car.Mileage</td>
+					<td> 
+						<a asp-action="details" asp-controller="cars" asp-route-id="@car.Id" class="btn btn-info">Details</a>
+						<a asp-action="edit" asp-controller="cars" asp-route-id="@car.Id" class="btn btn-primary">Edit</a> 
+						<a asp-action="delete" asp-controller="cars" asp-route-id="@car.Id" type="submit" class="btn btn-danger">Delete</a> 
+					</td>
+					
+				</tr>
+				rowNumber += 1;
+			}
+		</tbody>
+
+		</table>
+</form>
