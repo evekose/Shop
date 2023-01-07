@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Shop.Core.Domain.Car;
 using Shop.Core.Domain.Spaceship;
 using System;
 using System.Collections.Generic;
@@ -14,5 +15,6 @@ namespace Shop.Data
             : base(options) { }
 
         public DbSet<Spaceship> Spaceships { get; set; }
+        public DbSet<Car> Cars { get; set; }
     }
 }
