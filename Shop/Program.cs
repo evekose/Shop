@@ -13,6 +13,7 @@ builder.Services.AddDbContext<ShopContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<ISpaceshipsServices, SpaceshipsServices>();
+builder.Services.AddScoped<ICarsServices, CarServices>();
 
 var app = builder.Build();
 
