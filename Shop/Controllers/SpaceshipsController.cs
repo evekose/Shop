@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Shop.Core.Dto;
 using Shop.Core.ServiceInterface;
 using Shop.Data;
 using Shop.Models.Spaceship;
+using System.Runtime.CompilerServices;
 
 namespace Shop.Controllers
 {
@@ -67,7 +69,7 @@ namespace Shop.Controllers
                 Files = vm.Files,
                 Image = vm.Image.Select(x => new FileToDatabaseDto
 				{
-                    Id = x.Id,
+                    Id = x.ImageId,
                     ImageData = x.ImageData,
                     ImageTitle = x.ImageTitle,
                     SpaceshipId = x.SpaceshipId,
@@ -94,28 +96,47 @@ namespace Shop.Controllers
                 return NotFound();
             }
 
-            var vm = new SpaceshipCreateUpdateViewModel()
-            {
-                Id = spaceship.Id,
-                Name = spaceship.Name,
-                Type = spaceship.Type,
-                Crew = spaceship.Crew,
-                Passengers = spaceship.Passengers,
-                CargoWeight = spaceship.CargoWeight,
-                FullTripsCount = spaceship.FullTripsCount,
-                MaintenanceCount = spaceship.MaintenanceCount,
-                LastMaintenance = spaceship.LastMaintenance,
-                EnginePower = spaceship.EnginePower,
-                MaidenLaunch = spaceship.MaidenLaunch,
-                BuiltDate = spaceship.BuiltDate,
-                CreatedAt = spaceship.CreatedAt,
-                ModifiedAt = spaceship.ModifiedAt
-            };
+            var photos = await _context.FileToDatabase
+                .Where(x => x.SpaceshipId== id)
+                .Select(y => new ImageViewModel
+                {
+                    SpaceshipId = y.Id,
+                    ImageId=y.Id,
+                    ImageData = y.ImageData,
+                    ImageTitle = y.ImageTitle,
+                    Image = string.Format("data:image/gif;base64,{0}", Convert.ToBase64String(y.ImageData))
+                }).ToArrayAsync();
+
+
+            var vm = new SpaceshipCreateUpdateViewModel();
+
+
+            vm.Id = spaceship.Id;
+            vm.Name = spaceship.Name;
+            vm.Type = spaceship.Type;
+            vm.Crew = spaceship.Crew;
+            vm.Passengers = spaceship.Passengers;
+            vm.CargoWeight = spaceship.CargoWeight;
+            vm.FullTripsCount = spaceship.FullTripsCount;
+            vm.MaintenanceCount = spaceship.MaintenanceCount;
+            vm.LastMaintenance = spaceship.LastMaintenance;
+            vm.EnginePower = spaceship.EnginePower;
+            vm.MaidenLaunch = spaceship.MaidenLaunch;
+            vm.BuiltDate = spaceship.BuiltDate;
+            vm.CreatedAt = spaceship.CreatedAt;
+            vm.ModifiedAt = spaceship.ModifiedAt;
+            vm.Image.AddRange(photos);
+               
 
             return View("CreateUpdate", vm);
         }
 
-        [HttpPost]
+		private void ToArrayAsync()
+		{
+			throw new NotImplementedException();
+		}
+
+		[HttpPost]
         public async Task<IActionResult> Update(SpaceshipCreateUpdateViewModel vm)
         {
             var dto = new SpaceshipDto()
@@ -157,25 +178,37 @@ namespace Shop.Controllers
                 return NotFound();
             }
 
-            var vm = new SpaceshipDetailsViewModel()
-            {
-                Id = spaceship.Id,
-                Name = spaceship.Name,
-                Type = spaceship.Type,
-                Crew = spaceship.Crew,
-                Passengers = spaceship.Passengers,
-                CargoWeight = spaceship.CargoWeight,
-                FullTripsCount = spaceship.FullTripsCount,
-                MaintenanceCount = spaceship.MaintenanceCount,
-                LastMaintenance = spaceship.LastMaintenance,
-                EnginePower = spaceship.EnginePower,
-                MaidenLaunch = spaceship.MaidenLaunch,
-                BuiltDate = spaceship.BuiltDate,
-                CreatedAt = spaceship.CreatedAt,
-                ModifiedAt = spaceship.ModifiedAt
-            };
+			var photos = await _context.FileToDatabase
+				.Where(x => x.SpaceshipId == id)
+				.Select(y => new ImageViewModel
+				{
+					SpaceshipId = y.Id,
+					ImageId = y.Id,
+					ImageData = y.ImageData,
+					ImageTitle = y.ImageTitle,
+					Image = string.Format("data:image/gif;base64,{0}", Convert.ToBase64String(y.ImageData))
+				}).ToArrayAsync();
 
-            return View(vm);
+            var vm = new SpaceshipDetailsViewModel();
+            
+            vm.Id = spaceship.Id;
+            vm.Name = spaceship.Name;
+            vm.Type = spaceship.Type;
+            vm.Crew = spaceship.Crew;
+            vm.Passengers = spaceship.Passengers;
+            vm.CargoWeight = spaceship.CargoWeight;
+            vm.FullTripsCount = spaceship.FullTripsCount;
+            vm.MaintenanceCount = spaceship.MaintenanceCount;
+            vm.LastMaintenance = spaceship.LastMaintenance;
+            vm.EnginePower = spaceship.EnginePower;
+            vm.MaidenLaunch = spaceship.MaidenLaunch;
+            vm.BuiltDate = spaceship.BuiltDate;
+            vm.CreatedAt = spaceship.CreatedAt;
+            vm.ModifiedAt = spaceship.ModifiedAt;
+			vm.Image.AddRange(photos);
+
+
+			return View(vm);
         }
 
         [HttpGet]
