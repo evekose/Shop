@@ -60,7 +60,7 @@ namespace Shop.ApplicationServices.Services
                 EnginePower = dto.EnginePower,
                 Mileage = dto.Mileage,
                 BuiltDate = dto.BuiltDate,
-                MaintanceDate = DateTime.Now,
+                MaintanceDate = dto.MaintanceDate,
             };
 
             _context.Cars.Update(domain);
