@@ -36,8 +36,8 @@ namespace Shop.ApplicationServices.Services
                 Weight = dto.Weight,
                 EnginePower = dto.EnginePower,
                 Mileage = dto.Mileage,
-                BuiltDate = DateTime.Now,
-                MaintanceDate = DateTime.Now,
+                BuiltDate = dto.BuiltDate,
+                MaintanceDate = dto.MaintanceDate,
             };
 
             await _context.Cars.AddAsync(domain);
