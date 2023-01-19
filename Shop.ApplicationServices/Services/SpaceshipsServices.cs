@@ -78,7 +78,12 @@ namespace Shop.ApplicationServices.Services
                 ModifiedAt = DateTime.Now,
             };
 
-            _context.Spaceships.Update(domain);
+			if (dto.Files != null)
+			{
+				_files.UploadFilesToDatabase(dto, domain);
+			}
+
+			_context.Spaceships.Update(domain);
             await _context.SaveChangesAsync();
             return domain;
 
