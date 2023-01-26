@@ -58,6 +58,21 @@ namespace Shop.ApplicationServices.Services
 			_context.FileToDatabase.Remove(image);
 			await _context.SaveChangesAsync();
 
+			return image;
+		}
+
+		public async Task<List<FileToDatabase>> RemoveImagesFromDatabase(FileToDatabaseDto[] dtos)
+		{
+			foreach (var dto in dtos)
+			{
+				var image = await _context.FileToDatabase
+				.Where(x => x.Id == dto.Id)
+				.FirstOrDefaultAsync();
+
+				_context.FileToDatabase.Remove(image);
+				await _context.SaveChangesAsync();
+			}
+
 			return null;
 		}
 	}

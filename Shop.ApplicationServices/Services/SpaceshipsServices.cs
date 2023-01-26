@@ -4,11 +4,7 @@ using Shop.Core.Domain.Spaceship;
 using Shop.Core.Dto;
 using Shop.Core.ServiceInterface;
 using Shop.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Shop.ApplicationServices.Services
 {
@@ -95,6 +91,17 @@ namespace Shop.ApplicationServices.Services
             var spaceshipId = await _context.Spaceships
                 .FirstOrDefaultAsync(x => x.Id == id);
 
+            var images = await _context.FileToDatabase
+                .Where(x => x.SpaceshipId == id)
+                .Select(y => new FileToDatabaseDto
+                {
+                    Id = y.Id,
+                    ImageTitle = y.ImageTitle,
+                    SpaceshipId = y.SpaceshipId,
+                })
+                .ToArrayAsync();
+
+            await _files.RemoveImagesFromDatabase(images);
             _context.Spaceships.Remove(spaceshipId);
             await _context.SaveChangesAsync();
 
