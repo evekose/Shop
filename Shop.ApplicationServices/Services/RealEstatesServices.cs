@@ -82,8 +82,8 @@ namespace Shop.ApplicationServices.Services
 			//	_files.UploadFilesToDatabase(dto, domain);
 			//}
 
-			//_context.Spaceships.Update(domain);
-			//await _context.SaveChangesAsync();
+			_context.RealEstates.Update(domain);
+			await _context.SaveChangesAsync();
 			return domain;
 
 
@@ -105,8 +105,8 @@ namespace Shop.ApplicationServices.Services
 			//	.ToArrayAsync();
 
 			//await _files.RemoveImagesFromDatabase(images);
-			//_context.Spaceships.Remove(realEstateId);
-			//await _context.SaveChangesAsync();
+			_context.RealEstates.Remove(realEstateId);
+			await _context.SaveChangesAsync();
 
 			return realEstateId;
 		}

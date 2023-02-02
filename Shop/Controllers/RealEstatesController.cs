@@ -247,7 +247,7 @@ namespace Shop.Controllers
 			vm.Fax = realEstate.Fax;
 			vm.Size = realEstate.Size;
 			vm.Floor = realEstate.Floor;
-			vm.Size = realEstate.Size;
+			vm.Price = realEstate.Price;
 			vm.RoomCount = realEstate.RoomCount;
 			vm.CreatedAt = realEstate.CreatedAt;
 			vm.ModifiedAt = realEstate.ModifiedAt;
