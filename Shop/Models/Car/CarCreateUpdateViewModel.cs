@@ -1,6 +1,6 @@
 ﻿namespace Shop.Models.Car
 {
-    public class CarEditViewModel
+    public class CarCreateUpdateViewModel
     {
         public Guid? Id { get; set; }
         public string Brand { get; set; }
@@ -13,5 +13,7 @@
         public int Mileage { get; set; }
         public DateTime BuiltDate { get; set; }
         public DateTime MaintanceDate { get; set; }
-    }
+		public List<IFormFile> Files { get; set; }
+		public List<ImageViewModel> Image { get; set; } = new List<ImageViewModel>();
+	}
 }

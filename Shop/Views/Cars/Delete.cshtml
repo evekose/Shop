@@ -60,10 +60,20 @@
 			<label asp-for="MaintanceDate" class="col-sm-2 col-form-label"></label>
 			@Html.DisplayFor(model => model.MaintanceDate)
 		</div>
+
+		@foreach (var images in Model.Image)
+		{
+			<partial name="_Images" model="images" />
+		}
+
 	</dl>
+</div>
+<hr />
+<div>
 
 	<form asp-action="DeleteConfirmation">
 		<input type="hidden" asp-for="Id" />
 	<input type="submit" value="Delete"  class="btn btn-primary"  />
+		<a asp-action="Index" asp-controller="cars" class="btn btn-success">Back To List</a>
 	</form>
 </div>

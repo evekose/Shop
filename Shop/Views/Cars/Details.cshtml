@@ -60,6 +60,11 @@
 			<label asp-for="MaintanceDate" class="col-sm-2 col-form-label"></label>
 			@Html.DisplayFor(model => model.MaintanceDate)
 		</div>
+
+		@foreach (var images in Model.Image)
+		{
+			<partial name="_Images" model="images" />
+		}
 	</dl>
-	<a asp-action="Index" asp-controller="cars" class="btn btn-danger">Index</a>
+	<a asp-action="Index" asp-controller="cars" class="btn btn-danger">Back</a>
 </div>

@@ -13,5 +13,7 @@
         public int Mileage { get; set; }
         public DateTime BuiltDate { get; set; }
         public DateTime MaintanceDate { get; set; }
-    }
+
+		public List<ImageViewModel> Image { get; set; } = new List<ImageViewModel>();
+	}
 }

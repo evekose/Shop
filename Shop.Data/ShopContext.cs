@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Shop.Core.Domain;
 using Shop.Core.Domain.Car;
 using Shop.Core.Domain.Spaceship;
 using System;
@@ -16,5 +17,6 @@ namespace Shop.Data
 
         public DbSet<Spaceship> Spaceships { get; set; }
         public DbSet<Car> Cars { get; set; }
-    }
+		public DbSet<FileToDatabase> FileToDatabase { get; set; }
+	}
 }
