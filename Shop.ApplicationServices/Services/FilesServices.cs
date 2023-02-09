@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting;
 using Shop.Core.Domain;
 using Shop.Core.Domain.Spaceship;
 using Shop.Core.Dto;
@@ -15,13 +16,15 @@ namespace Shop.ApplicationServices.Services
 	public class FilesServices : IFilesServices
 	{
 		private readonly ShopContext _context;
-
+		private readonly IHostingEnvironment _webHost;
 		public FilesServices
 			(
-				ShopContext context
+				ShopContext context,
+				IHostingEnvironment webHost
 			)
 		{
 			_context = context;
+			_webHost = webHost;
 		}
 
 		public void UploadFilesToDatabase(SpaceshipDto dto, Spaceship domain)
@@ -74,6 +77,41 @@ namespace Shop.ApplicationServices.Services
 			}
 
 			return null;
+		}
+
+		public void FilesToApi(RealEstateDto dto, RealEstate realEstate)
+		{
+			string uniqueFileName = null;
+
+			if (dto.Files != null && dto.Files.Count > 0)
+			{
+				if (!Directory.Exists(_webHost.WebRootPath + "\\multipleFileUpload\\"))
+				{
+					Directory.CreateDirectory(_webHost.WebRootPath + "\\multipleFileUpload\\");
+				}
+
+				foreach (var image in dto.Files)
+				{
+					string uploadsFolder = Path.Combine(_webHost.WebRootPath, "multipleFileUpload");
+					uniqueFileName = Guid.NewGuid().ToString() + "_" + image.FileName;
+					string filePath  = Path.Combine(uploadsFolder, uniqueFileName);
+
+					using (var fileStream = new FileStream(filePath, FileMode.Create))
+					{
+						image.CopyTo(fileStream);
+
+						FileToApi path = new FileToApi
+						{
+							Id = Guid.NewGuid(),
+							ExistingFilePath = filePath,
+							RealEstateId = realEstate.Id,
+						};
+
+						_context.FileToApis.AddAsync(path);
+					}
+				}
+			}
+
 		}
 	}
 }

@@ -15,13 +15,16 @@ namespace Shop.ApplicationServices.Services
 	public class RealEstatesServices : IRealEstatesServices
 	{
 		private readonly ShopContext _context;
+		private readonly IFilesServices _filesServices;
 		
 		public RealEstatesServices
 			(
-				ShopContext context
+				ShopContext context,
+				IFilesServices filesServices
 			)
 		{
 			_context = context;
+			_filesServices = filesServices;
 		}
 
 		public async Task<RealEstate> GetAsync()
@@ -50,6 +53,7 @@ namespace Shop.ApplicationServices.Services
 			realEstate.RoomCount = dto.RoomCount;
 			realEstate.ModifiedAt = DateTime.Now;
 			realEstate.CreatedAt = DateTime.Now;
+			_filesServices.FilesToApi(dto, realEstate);
 
 			await _context.RealEstates.AddAsync(realEstate);
 			await _context.SaveChangesAsync();

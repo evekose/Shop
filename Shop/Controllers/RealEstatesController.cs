@@ -71,7 +71,16 @@ namespace Shop.Controllers
 				PostalCode = vm.PostalCode,
 				RoomCount = vm.RoomCount,
 				CreatedAt = vm.CreatedAt,
-				ModifiedAt = vm.ModifiedAt
+				ModifiedAt = vm.ModifiedAt,
+				Files = vm.Files,
+				FileToApiDtos = vm.FileToApiViewModels.Select(x => new FileToApiDto 
+				
+				{
+					Id = x.ImageId,
+					ExistingFilePath = x.FilePath,
+					RealEstateId = x.RealEstateId
+				}).ToArray()
+
 			};
 
 			var result = await _realEstatesServices.Create(dto);
@@ -224,16 +233,6 @@ namespace Shop.Controllers
 				return NotFound();
 			}
 
-			//var photos = await _context.FileToDatabase
-			//	.Where(x => x.SpaceshipId == id)
-			//	.Select(y => new ImageViewModel
-			//	{
-			//		SpaceshipId = y.Id,
-			//		ImageId = y.Id,
-			//		ImageData = y.ImageData,
-			//		ImageTitle = y.ImageTitle,
-			//		Image = string.Format("data:image/gif;base64,{0}", Convert.ToBase64String(y.ImageData))
-			//	}).ToArrayAsync();
 
 			var vm = new RealEstateDeleteViewModel();
 
