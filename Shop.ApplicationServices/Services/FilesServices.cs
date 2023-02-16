@@ -103,7 +103,7 @@ namespace Shop.ApplicationServices.Services
 						FileToApi path = new FileToApi
 						{
 							Id = Guid.NewGuid(),
-							ExistingFilePath = filePath,
+							ExistingFilePath = uniqueFileName,
 							RealEstateId = realEstate.Id,
 						};
 
@@ -111,6 +111,48 @@ namespace Shop.ApplicationServices.Services
 					}
 				}
 			}
+
+		}
+
+		public async Task<List<FileToApi>> RemoveImagesFromApi(FileToApiDto[] dtos)
+		{
+			foreach (var dto in dtos)
+			{
+				var imageId = await _context.FileToApis
+					.FirstOrDefaultAsync(x => x.ExistingFilePath == dto.ExistingFilePath);
+				var filePath = _webHost.WebRootPath + "\\mutipleFileUpload\\" + imageId.ExistingFilePath;
+
+				if (File.Exists(filePath))
+				{
+					File.Delete(filePath);
+				}
+
+				_context.FileToApis.Remove(imageId);
+				await _context.SaveChangesAsync();
+			}
+
+			return null;
+
+		}
+
+		public async Task<FileToApi> RemoveImageFromApi(FileToApiDto dto)
+		{
+			
+				var imageId = await _context.FileToApis
+					.FirstOrDefaultAsync(x => x.Id == dto.Id);
+
+				var filePath = _webHost.WebRootPath + "\\mutipleFileUpload\\" + imageId.ExistingFilePath;
+
+				if (File.Exists(filePath))
+				{
+					File.Delete(filePath);
+				}
+
+				_context.FileToApis.Remove(imageId);
+				await _context.SaveChangesAsync();
+		
+
+			return null;
 
 		}
 	}

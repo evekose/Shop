@@ -15,15 +15,19 @@ namespace Shop.Controllers
 	{
 		private readonly IRealEstatesServices _realEstatesServices;
 		private readonly ShopContext _context;
+		private readonly IFilesServices _filesServices;
 		public RealEstatesController
 			(
 				IRealEstatesServices realEstatesServices,
-				ShopContext context
+				ShopContext context,
+				IFilesServices filesServices
+
 			)
 
 		{
 			_realEstatesServices = realEstatesServices;
 			_context = context;
+			_filesServices = filesServices;
 		}
 
 		[HttpGet]
@@ -102,20 +106,16 @@ namespace Shop.Controllers
 			{
 				return NotFound();
 			}
-			//var photos = await _context.FileToDatabase
-			//   .Where(x => x.SpaceshipId == id)
-			//   .Select(y => new ImageViewModel
-			//   {
-			//	   SpaceshipId = y.Id,
-			//	   ImageId = y.Id,
-			//	   ImageData = y.ImageData,
-			//	   ImageTitle = y.ImageTitle,
-			//	   Image = string.Format("data:image/gif;base64,{0}", Convert.ToBase64String(y.ImageData))
-			//   }).ToArrayAsync();
 
+			var images = await _context.FileToApis
+				.Where(x => x.RealEstateId == id)
+				.Select(y => new FileToApiViewModel
+				{
+					FilePath = y.ExistingFilePath, 
+					ImageId = y.Id
+				}).ToArrayAsync();
 
 			var vm = new RealEstateCreateUpdateViewModel();
-
 
 			vm.Id = realEstate.Id;
 			vm.Address = realEstate.Address;
@@ -131,8 +131,7 @@ namespace Shop.Controllers
 			vm.RoomCount = realEstate.RoomCount;
 			vm.CreatedAt = realEstate.CreatedAt;
 			vm.ModifiedAt = realEstate.ModifiedAt;
-			//vm.Image.AddRange(photos);
-
+			vm.FileToApiViewModels.AddRange(images);
 
 			return View("CreateUpdate", vm);
 		}
@@ -161,14 +160,14 @@ namespace Shop.Controllers
 				RoomCount = vm.RoomCount,
 				CreatedAt = vm.CreatedAt,
 				ModifiedAt = vm.ModifiedAt,
-				//Files = vm.Files,
-				//Image = vm.Image.Select(x => new FileToDatabaseDto
-				//{
-				//	Id = x.ImageId,
-				//	ImageData = x.ImageData,
-				//	ImageTitle = x.ImageTitle,
-				//	SpaceshipId = x.SpaceshipId,
-				//}).ToArray()
+				Files = vm.Files,
+				FileToApiDtos = vm.FileToApiViewModels
+					.Select(x => new FileToApiDto
+					{
+						Id = x.ImageId,
+						ExistingFilePath = x.FilePath,
+						RealEstateId = x.RealEstateId
+					}).ToArray()
 			};
 
 			var result = await _realEstatesServices.Update(dto);
@@ -191,16 +190,14 @@ namespace Shop.Controllers
 				return NotFound();
 			}
 
-			//var photos = await _context.FileToDatabase
-			//	.Where(x => x.SpaceshipId == id)
-			//	.Select(y => new ImageViewModel
-			//	{
-			//		RealEstateId = y.Id,
-			//		ImageId = y.Id,
-			//		ImageData = y.ImageData,
-			//		ImageTitle = y.ImageTitle,
-			//		Image = string.Format("data:image/gif;base64,{0}", Convert.ToBase64String(y.ImageData))
-			//	}).ToArrayAsync();
+			var images = await _context.FileToApis
+				.Where(x => x.RealEstateId == id)
+				.Select(y => new FileToApiViewModel
+				{
+					FilePath = y.ExistingFilePath,
+					ImageId = y.Id
+				}).ToArrayAsync();
+
 
 			var vm = new RealEstateDetailsViewModel();
 
@@ -218,7 +215,7 @@ namespace Shop.Controllers
 			vm.RoomCount = realEstate.RoomCount;
 			vm.CreatedAt = realEstate.CreatedAt;
 			vm.ModifiedAt = realEstate.ModifiedAt;
-			//vm.Image.AddRange(photos);
+			vm.FileToApiViewModels.AddRange(images);
 
 
 			return View(vm);
@@ -232,6 +229,14 @@ namespace Shop.Controllers
 			{
 				return NotFound();
 			}
+
+			var images = await _context.FileToApis
+				.Where(x => x.RealEstateId == id)
+				.Select(y => new FileToApiViewModel
+				{
+					FilePath = y.ExistingFilePath,
+					ImageId = y.Id
+				}).ToArrayAsync();
 
 
 			var vm = new RealEstateDeleteViewModel();
@@ -250,8 +255,8 @@ namespace Shop.Controllers
 			vm.RoomCount = realEstate.RoomCount;
 			vm.CreatedAt = realEstate.CreatedAt;
 			vm.ModifiedAt = realEstate.ModifiedAt;
-			//vm.Image.AddRange(photos);
-
+			vm.FileToApiViewModels.AddRange(images);
+			
 			return View(vm);
 		}
 
@@ -267,22 +272,23 @@ namespace Shop.Controllers
 			return RedirectToAction(nameof(Index));
 		}
 
-		//[HttpPost]
-		//public async Task<IActionResult> RemoveImage(ImageViewModel file)
-		//{
-		//	var dto = new FileToDatabaseDto()
-		//	{
-		//		Id = file.ImageId
-		//	};
+		[HttpPost]
+		public async Task<IActionResult> RemoveImage(FileToApiViewModel vm)
+		{
+			var dto = new FileToApiDto()
+			{
+				Id = vm.ImageId
+			};
 
-		//	var image = await _filesServices.RemoveImage(dto);
+			var image = await _filesServices.RemoveImageFromApi(dto);
 
-		//	if (image == null)
-		//	{
-		//		return RedirectToAction(nameof(Index));
-		//	}
+			if (image == null)
+			{
+				return RedirectToAction(nameof(Index));
+			}
 
-		//	return RedirectToAction(nameof(Index));
-		//}
+			return RedirectToAction(nameof(Index));
+		}
+		
 	}
 }

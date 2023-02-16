@@ -15,6 +15,9 @@
 		public int Price { get; set; }
 		public int RoomCount { get; set; }
 
+		public List<FileToApiViewModel> FileToApiViewModels { get; set; }
+			= new List<FileToApiViewModel>();
+
 		//only in database
 		public DateTime CreatedAt { get; set; }
 		public DateTime ModifiedAt { get; set; }
