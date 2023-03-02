@@ -26,14 +26,14 @@ namespace Shop.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult ShowWeather(WeatherViewModel vm)
+		public IActionResult ShowWeather()
 		{
 			if (ModelState.IsValid) 
 			{
 				return RedirectToAction("City", "WeatherForecasts");
 			}
 
-			return View(vm);
+			return View();
 		}
 
 		[HttpGet]
@@ -61,17 +61,17 @@ namespace Shop.Controllers
 			vm.Temperature.Maximum.Unit = dto.TempMaxUnit;
 			vm.Temperature.Maximum.UnitType = dto.TempMaxUnitType;
 
-			vm.DayNightCycle.Icon = dto.DayIcon;
-			vm.DayNightCycle.IconPhrase = dto.DayIconPhrase;
-			vm.DayNightCycle.HasPrecipitation = dto.DayHasPrecipitation;
-			vm.DayNightCycle.PrecipitationType = dto.DayPrecipitationType;
-			vm.DayNightCycle.PrecipitationIntensity = dto.DayPrecipitationIntensity;
+			vm.DayCycle.Icon = dto.DayIcon;
+			vm.DayCycle.IconPhrase = dto.DayIconPhrase;
+			vm.DayCycle.HasPrecipitation = dto.DayHasPrecipitation;
+			vm.DayCycle.PrecipitationType = dto.DayPrecipitationType;
+			vm.DayCycle.PrecipitationIntensity = dto.DayPrecipitationIntensity;
 
-			vm.DayNightCycle.Icon = dto.NightIcon;
-			vm.DayNightCycle.IconPhrase = dto.NightIconPhrase;
-			vm.DayNightCycle.HasPrecipitation = dto.NightHasPrecipitation;
-			vm.DayNightCycle.PrecipitationType = dto.NightPrecipitationType;
-			vm.DayNightCycle.PrecipitationIntensity = dto.NightPrecipitationIntensity;
+			vm.NightCycle.Icon = dto.NightIcon;
+			vm.NightCycle.IconPhrase = dto.NightIconPhrase;
+			vm.NightCycle.HasPrecipitation = dto.NightHasPrecipitation;
+			vm.NightCycle.PrecipitationType = dto.NightPrecipitationType;
+			vm.NightCycle.PrecipitationIntensity = dto.NightPrecipitationIntensity;
 
 
 			return View(vm);
