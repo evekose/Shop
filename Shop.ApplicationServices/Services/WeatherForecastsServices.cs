@@ -36,9 +36,6 @@ namespace Shop.ApplicationServices.Services
 					dto.MobileLink = weatherInfo.Headline.MobileLink;
 					dto.Link = weatherInfo.Headline.Link;
 
-					//dto.DailyForecastsDay = weatherInfo.DailyForecasts[0].;
-					//dto.DailyForecastsEpochDate = weatherInfo.DailyForecasts[0].EpochDate;
-
 					dto.TempMinValue = weatherInfo.DailyForecasts[0].Temperature.Minimum.Value;
 					dto.TempMinUnit = weatherInfo.DailyForecasts[0].Temperature.Minimum.Unit;
 					dto.TempMinUnitType = weatherInfo.DailyForecasts[0].Temperature.Minimum.UnitType;
