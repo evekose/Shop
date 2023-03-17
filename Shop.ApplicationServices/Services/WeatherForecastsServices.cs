@@ -1,12 +1,8 @@
 ﻿using Nancy.Json;
 using Shop.Core.Dto.WeatherDtos;
 using Shop.Core.ServiceInterface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Shop.ApplicationServices.Services
 {
@@ -63,7 +59,7 @@ namespace Shop.ApplicationServices.Services
 
 		public async Task<OpenWeatherResultDto> OpenWeatherDetail(OpenWeatherResultDto dto)
 		{
-			var url = $"https://api.openweathermap.org/data/2.5/weather?lat=41.015137&lon=28.979530&appid=4cb0fe3c2a58d6d03ad5c766290af9a1";
+			var url = $"https://api.openweathermap.org/data/2.5/weather?q=Istanbul&appid=4cb0fe3c2a58d6d03ad5c766290af9a1";
 
 			using (WebClient client = new WebClient())
 			{

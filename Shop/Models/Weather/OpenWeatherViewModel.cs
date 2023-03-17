@@ -4,7 +4,6 @@ namespace Shop.Models.Weather
 {
 	public class OpenWeatherViewModel
 	{
-		public Coord Coords { get; set; }
 		public List<Weather> Weathers { get; set; }
 		public Main Mains { get; set; }
 		public int Visibility { get; set; }
@@ -13,12 +12,6 @@ namespace Shop.Models.Weather
 		public int Timezone { get; set; }
 		public int Id { get; set; }
 		public string Name { get; set; }
-
-		public class Coord
-		{
-			public double Lon { get; set; }
-			public double Lat { get; set; }
-		}
 
 		public class Main
 		{

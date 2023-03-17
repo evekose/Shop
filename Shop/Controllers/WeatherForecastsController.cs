@@ -14,7 +14,7 @@ namespace Shop.Controllers
 				IWeatherForecastsServices weatherForecastServices
 			)
 		{
-			_weatherForecastServices= weatherForecastServices;
+			_weatherForecastServices = weatherForecastServices;
 		}
 
 		public IActionResult Index()
@@ -28,7 +28,7 @@ namespace Shop.Controllers
 		[HttpPost]
 		public IActionResult ShowWeather()
 		{
-			if (ModelState.IsValid) 
+			if (ModelState.IsValid)
 			{
 				return RedirectToAction("City", "WeatherForecasts");
 			}
@@ -47,7 +47,7 @@ namespace Shop.Controllers
 			vm.Date = dto.EffectiveDate;
 			vm.EpochDate = dto.EffectiveEpochDate;
 			vm.Severity = dto.Severity;
-			vm.Text =  dto.Text;
+			vm.Text = dto.Text;
 			vm.MobileLink = dto.MobileLink;
 			vm.Link = dto.Link;
 			vm.Category = dto.Category;
@@ -77,5 +77,53 @@ namespace Shop.Controllers
 			return View(vm);
 
 		}
-	}
+
+		[HttpPost]
+		public IActionResult ShowOpenWeather()
+		{
+			if (ModelState.IsValid)
+			{
+				return RedirectToAction("OpenWeatherCity", "WeatherForecasts");
+			}
+
+			return View();
+		}
+
+		[HttpGet]
+		public IActionResult OpenWeatherCity()
+		{
+			OpenWeatherResultDto dto = new OpenWeatherResultDto();
+			OpenWeatherViewModel vm = new OpenWeatherViewModel();
+
+			_weatherForecastServices.OpenWeatherDetail(dto);
+
+			vm.Name = dto.Name;
+			vm.Visibility = dto.Visibility;
+			vm.Timezone = dto.Timezone;
+			vm.Id = dto.Id;
+
+			vm.Weathers = new List<OpenWeatherViewModel.Weather>();
+			vm.Weathers.Add(new OpenWeatherViewModel.Weather());
+			vm.Weathers[0].Main = dto.Main;
+			vm.Weathers[0].Description = dto.Description;
+
+			vm.Mains = new OpenWeatherViewModel.Main();
+			vm.Mains.Temp = dto.Temp;
+			vm.Mains.Feels_like = dto.Feels_like;
+			vm.Mains.Pressure = dto.Pressure;
+			vm.Mains.Humidity = dto.Humidity;
+
+			vm.Syss = new OpenWeatherViewModel.Sys();
+			vm.Syss.Country = dto.Country;
+			vm.Syss.Sunset = dto.Sunset;
+			vm.Syss.Sunrise = dto.Sunrise;
+
+			vm.Winds = new OpenWeatherViewModel.Wind();
+			vm.Winds.Speed = dto.Speed;
+
+
+			return View(vm);
+		}
+
+	}	
 }

@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using static Shop.Core.Dto.WeatherDtos.OpenWeatherDto;
+﻿using System.Text.Json.Serialization;
 
 namespace Shop.Core.Dto.WeatherDtos
 {
 	public class OpenWeatherDto
 	{
-		[JsonPropertyName("coord")]
-		public Coords Coord { get; set; }
-
 		[JsonPropertyName("main")]
 		public Mains Main { get; set; }
 
@@ -36,16 +27,6 @@ namespace Shop.Core.Dto.WeatherDtos
 
 		[JsonPropertyName("visibility")]
 		public int Visibility { get; set; }
-
-
-		public class Coords
-		{
-			[JsonPropertyName("lon")]
-			public double Lon { get; set; }
-
-			[JsonPropertyName("lon")]
-			public double Lat { get; set; }
-		}
 
 		public class Mains
 		{
