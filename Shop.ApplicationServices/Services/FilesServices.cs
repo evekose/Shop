@@ -1,26 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Hosting;
 using Shop.Core.Domain;
 using Shop.Core.Domain.Spaceship;
 using Shop.Core.Dto;
 using Shop.Core.ServiceInterface;
 using Shop.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
 
 namespace Shop.ApplicationServices.Services
 {
 	public class FilesServices : IFilesServices
 	{
 		private readonly ShopContext _context;
-		private readonly IHostingEnvironment _webHost;
+		private readonly IHostEnvironment _webHost;
 		public FilesServices
 			(
 				ShopContext context,
-				IHostingEnvironment webHost
+				IHostEnvironment webHost
 			)
 		{
 			_context = context;
@@ -85,14 +80,14 @@ namespace Shop.ApplicationServices.Services
 
 			if (dto.Files != null && dto.Files.Count > 0)
 			{
-				if (!Directory.Exists(_webHost.WebRootPath + "\\multipleFileUpload\\"))
+				if (!Directory.Exists(_webHost.ContentRootPath + "\\multipleFileUpload\\"))
 				{
-					Directory.CreateDirectory(_webHost.WebRootPath + "\\multipleFileUpload\\");
+					Directory.CreateDirectory(_webHost.ContentRootPath + "\\multipleFileUpload\\");
 				}
 
 				foreach (var image in dto.Files)
 				{
-					string uploadsFolder = Path.Combine(_webHost.WebRootPath, "multipleFileUpload");
+					string uploadsFolder = Path.Combine(_webHost.ContentRootPath, "multipleFileUpload");
 					uniqueFileName = Guid.NewGuid().ToString() + "_" + image.FileName;
 					string filePath  = Path.Combine(uploadsFolder, uniqueFileName);
 
@@ -120,7 +115,7 @@ namespace Shop.ApplicationServices.Services
 			{
 				var imageId = await _context.FileToApis
 					.FirstOrDefaultAsync(x => x.ExistingFilePath == dto.ExistingFilePath);
-				var filePath = _webHost.WebRootPath + "\\mutipleFileUpload\\" + imageId.ExistingFilePath;
+				var filePath = _webHost.ContentRootPath + "\\mutipleFileUpload\\" + imageId.ExistingFilePath;
 
 				if (File.Exists(filePath))
 				{
@@ -141,7 +136,7 @@ namespace Shop.ApplicationServices.Services
 				var imageId = await _context.FileToApis
 					.FirstOrDefaultAsync(x => x.Id == dto.Id);
 
-				var filePath = _webHost.WebRootPath + "\\mutipleFileUpload\\" + imageId.ExistingFilePath;
+				var filePath = _webHost.ContentRootPath + "\\mutipleFileUpload\\" + imageId.ExistingFilePath;
 
 				if (File.Exists(filePath))
 				{

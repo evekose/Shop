@@ -6,6 +6,8 @@ using Shop.SpaceshipTest.Macros;
 using Shop.Core.ServiceInterface;
 using Shop.ApplicationServices.Services;
 using Microsoft.AspNetCore.Hosting;
+using Shop.SpaceshipTest.Mock;
+using Microsoft.Extensions.Hosting;
 
 namespace Shop.SpaceshipTest
 {
@@ -47,7 +49,7 @@ namespace Shop.SpaceshipTest
 
 			services.AddScoped<ISpaceshipsServices, SpaceshipsServices>();
 			services.AddScoped<IFilesServices, FilesServices>();
-			services.AddScoped<IWebHostEnvironment>();
+			services.AddScoped<IHostEnvironment, MockIHostEnvironment>();
 
 
 			services.AddDbContext<ShopContext>(x =>
