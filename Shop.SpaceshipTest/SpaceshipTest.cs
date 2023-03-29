@@ -85,11 +85,24 @@ namespace Shop.SpaceshipTest
 		}
 
 		[Fact]
-		private async Task Should_UpdateSpaceship_WhenUpdateData()
+		public async Task ShouldNot_DeleteByIdSpaceShip_WhenDidNotDeleteSpaceship()
+		{
+			SpaceshipDto spaceship = MockSpaceshipData();
+			var addspaceship = await Svc<ISpaceshipsServices>().Create(spaceship);
+			var addSpaceship2 = await Svc<ISpaceshipsServices>().Create(spaceship);
+
+			var result = await Svc<ISpaceshipsServices>().Delete((Guid)addSpaceship2.Id);
+
+			Assert.NotEqual(result.Id, addspaceship.Id);
+		}
+
+		[Fact]
+		public async Task Should_UpdateSpaceship_WhenUpdateData()
 		{
 			var guid = new Guid("15b18d85-bb40-4dbe-9093-cc910f22df43");
 
 			Spaceship spaceship = new Spaceship();
+
 			SpaceshipDto dto = MockSpaceshipData();
 
 			spaceship.Id = Guid.Parse("15b18d85-bb40-4dbe-9093-cc910f22df43");
@@ -123,6 +136,33 @@ namespace Shop.SpaceshipTest
 			Assert.Equal(spaceship.Crew, dto.Crew);
 		}
 
+		[Fact]
+		public async Task Should_UpdateSpaceship_WhenUpdateDataVersion2()
+		{
+			SpaceshipDto dto = MockSpaceshipData();
+			var createSpaceship = await Svc<ISpaceshipsServices>().Create(dto);
+			SpaceshipDto update = MockUpdateSpaceship();
+			var result = await Svc<ISpaceshipsServices>().Update(update);
+			Assert.Equal(update.Id, dto.Id);
+			Assert.DoesNotMatch(result.Name, createSpaceship.Name);
+			Assert.DoesNotMatch(result.EnginePower.ToString(), createSpaceship.EnginePower.ToString());
+			Assert.Equal(result.Crew, createSpaceship.Crew);
+			Assert.NotEqual(result.ModifiedAt, createSpaceship.ModifiedAt);
+		}
+
+		[Fact]
+		public async Task ShouldNot_UpdateSpaceship_WhenNotUpdateData()
+		{
+			SpaceshipDto dto = MockSpaceshipData();
+			var createSpaceship = await Svc<ISpaceshipsServices>().Create(dto);
+
+			SpaceshipDto nullUpdate = MockNullSpaceship();
+			var result = await Svc<ISpaceshipsServices>().Update(nullUpdate);
+
+			var nullId = nullUpdate.Id;
+
+			Assert.False(result.Id == nullId);
+		}
 
 		private SpaceshipDto MockSpaceshipData()
 		{
@@ -146,23 +186,6 @@ namespace Shop.SpaceshipTest
 			return spaceship;
 		}
 
-		[Fact]
-		private async Task Should_UpdateSpaceship_WhenUpdateDataVersion2()
-		{
-			SpaceshipDto dto = MockSpaceshipData();
-			var createSpaceship = await Svc<ISpaceshipsServices>().Create(dto);
-
-			SpaceshipDto update = MockUpdateSpaceship();
-			var result = await Svc<ISpaceshipsServices>().Update(update);
-
-			Assert.Equal(update.Id, dto.Id);
-			Assert.DoesNotMatch(result.Name, createSpaceship.Name);
-			Assert.DoesNotMatch(result.EnginePower.ToString(), createSpaceship.EnginePower.ToString());
-			Assert.Equal(result.Crew, createSpaceship.Crew);
-			Assert.NotEqual(result.ModifiedAt, createSpaceship.ModifiedAt);
-		}
-
-
 		private SpaceshipDto MockUpdateSpaceship()
 		{
 			SpaceshipDto update = new()
@@ -183,6 +206,28 @@ namespace Shop.SpaceshipTest
 			};
 
 			return update;
+		}
+		private SpaceshipDto MockNullSpaceship()
+		{
+			SpaceshipDto nullDto = new()
+			{
+				Id = null,
+				Name = "Name123",
+				Type = "asd",
+				Crew = 123,
+				Passengers = 123123,
+				CargoWeight = 123,
+				FullTripsCount = 123123,
+				MaintenanceCount = 1000123,
+				LastMaintenance = DateTime.Now.AddYears(1),
+				EnginePower = 1000123,
+				MaidenLaunch = DateTime.Now.AddYears(1),
+				BuiltDate = DateTime.Now.AddYears(1),
+				CreatedAt = DateTime.Now.AddYears(1),
+				ModifiedAt = DateTime.Now.AddYears(1),
+			};
+
+			return nullDto;
 		}
 	}
 }
